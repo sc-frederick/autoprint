@@ -1,3 +1,5 @@
 **/bin
 **/obj
 *.csproj.user
+AGENTS.md
+QUICKSTART.md

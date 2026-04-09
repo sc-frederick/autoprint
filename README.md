@@ -70,6 +70,10 @@ docker run -d \
            sc-frederick/autoprint
 ```
 
+## Attribution
+
+This project is a fork of [willson556/autoprint](https://github.com/willson556/autoprint), originally created by [Thomas Willson](https://github.com/willson556). All credit for the original concept and implementation goes to him. This project is distributed under the same [MIT license](LICENSE) as the original.
+
 ## References
 
 - https://www.codeproject.com/Articles/32239/Keep-Your-InkJet-Print-Head-Clean
