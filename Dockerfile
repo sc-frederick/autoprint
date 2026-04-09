@@ -15,11 +15,14 @@ FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 WORKDIR /app
 COPY --from=build /build/out ./
 
-# Install Cron, libgdiplus, cups
-RUN apt-get update -qq && apt-get -y install cron libgdiplus cups -qq --force-yes
+# Point apt at archived Buster repos (Buster is EOL, mirrors removed from deb.debian.org)
+RUN echo "deb http://archive.debian.org/debian buster main" > /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list
 
-# Add export environment variable script and schedule
-RUN echo "0 8 */2 * * root /app/autoPrint >> /var/log/cron.log 2>&1" > /etc/cron.d/schedule
+# Install Cron, libgdiplus, cups
+RUN apt-get update -qq && apt-get -y install --no-install-recommends cron libgdiplus cups -qq --force-yes
+
+# Schedule is generated dynamically by start.sh from PRINT_INTERVAL and PRINT_TIME env vars
 
 # Create log file
 RUN touch /var/log/cron.log

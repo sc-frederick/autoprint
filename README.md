@@ -32,16 +32,43 @@ Schedule using Cron, Systemd, Windows Task Scheduler. Place the paper back into 
 
 ## Docker
 
-The provided docker image is set to run AutoPrint every other day at 8:00 AM. Replace the provided URI with your printer's IPP (or some other CUPS-compatible) URI.
+The provided docker image bundles CUPS and cron. Replace the provided URI with your printer's IPP (or some other CUPS-compatible) URI.
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `PRINTER_URI` | Yes | — | Your printer's IPP (or CUPS-compatible) URI |
+| `TZ` | No | `UTC` | Timezone for the cron schedule |
+| `PRINT_INTERVAL` | No | `2` | Days between prints (e.g. `1` = daily, `7` = weekly) |
+| `PRINT_TIME` | No | `08:00` | Time to print in 24h `HH:MM` format |
+
+### Docker Compose
+
+```yaml
+services:
+  autoprint:
+    container_name: autoprint
+    image: sc-frederick/autoprint
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+      - PRINTER_URI=https://192.168.1.138:631/ipp/print
+      - PRINT_INTERVAL=2
+      - PRINT_TIME=08:00
+```
+
+### Docker Run
 
 ```sh
-docker pull thomaswillson/autoprint
 docker run -d \
            --name autoprint \
-           -e TZ=America/Los_Angeles \
+           -e TZ=America/New_York \
            -e PRINTER_URI=https://192.168.1.138:631/ipp/print \
-           thomaswillson/autoprint
-  ```
+           -e PRINT_INTERVAL=2 \
+           -e PRINT_TIME=08:00 \
+           sc-frederick/autoprint
+```
 
 ## References
 
